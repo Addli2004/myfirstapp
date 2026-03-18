@@ -1,3 +1,4 @@
+<!-- انسخ هذا الكود وضعه في GitHub ليصبح الرابط محدثاً -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -5,63 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Batman AI Assistant</title>
     <style>
-        body { margin: 0; background-color: #121212; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; height: 100vh; }
-        #header { background-color: #1f1f1f; padding: 15px; display: flex; align-items: center; border-bottom: 2px solid #333; }
-        #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .message { max-width: 80%; padding: 12px 18px; border-radius: 20px; line-height: 1.4; font-size: 16px; }
-        .bot { align-self: flex-start; background-color: #333; border-bottom-right-radius: 5px; color: #eee; }
-        .user { align-self: flex-end; background-color: #007aff; border-bottom-left-radius: 5px; }
-        #input-area { background-color: #1f1f1f; padding: 15px; display: flex; gap: 10px; align-items: center; }
-        input { flex: 1; background: #2c2c2c; border: none; padding: 12px; border-radius: 25px; color: white; outline: none; font-size: 16px; text-align: right; }
-        button { background: #007aff; border: none; color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 20px; }
+        body { margin: 0; background: #121212; color: white; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
+        #chat { flex: 1; overflow-y: auto; padding: 15px; }
+        .msg { margin-bottom: 10px; padding: 10px; border-radius: 10px; max-width: 80%; }
+        .bot { background: #333; align-self: flex-start; }
+        .user { background: #007bff; align-self: flex-end; margin-right: auto; }
     </style>
 </head>
 <body>
-    <div id="header">
-        <img src="https://img.icons8.com/ios-filled/50/ffffff/batman-logo.png" width="30">
-        <span style="margin-right: 15px; font-weight: bold; font-size: 20px;">Batman AI Assistant</span>
+    <div id="chat"></div>
+    <div style="padding: 10px; background: #1f1f1f; display: flex;">
+        <input type="text" id="in" style="flex: 1; padding: 10px; border-radius: 5px; border: none;">
+        <button onclick="send()" style="margin-left: 5px;">إرسال</button>
     </div>
-    <div id="chat-container" id="chat"></div>
-    <div id="input-area">
-        <input type="text" id="userInput" placeholder="تحدث مع باتمان...">
-        <button onclick="send()">✈</button>
-    </div>
-
     <script>
-        const chat = document.getElementById('chat-container');
-        const input = document.getElementById('userInput');
-
-        function addMsg(txt, type) {
-            const div = document.createElement('div');
-            div.className = `message ${type}`;
-            div.innerText = txt;
-            chat.appendChild(div);
-            chat.scrollTop = chat.scrollHeight;
-            if(type === 'bot') speak(txt);
-        }
-
-        function speak(txt) {
-            const msg = new SpeechSynthesisUtterance(txt);
-            msg.lang = 'ar-SA';
-            msg.pitch = 0.6; // صوت عميق لباتمان
-            window.speechSynthesis.speak(msg);
-        }
-
         function send() {
-            const val = input.value;
-            if(!val) return;
-            addMsg(val, 'user');
-            input.value = '';
-            
+            let i = document.getElementById('in');
+            if(!i.value) return;
+            document.getElementById('chat').innerHTML += `<div class="msg user">${i.value}</div>`;
+            let val = i.value; i.value = '';
             setTimeout(() => {
-                let res = "أنا هنا لحمايتك ومساعدتك. كباتمان، أقدر تواصلك معي بخصوص " + val;
-                if(val.includes("كيف حالك")) res = "أنا بخير وبكامل قوتي. شكراً لسؤالك اللطيف يا صديقي.";
-                addMsg(res, 'bot');
+                document.getElementById('chat').innerHTML += `<div class="msg bot">أنا باتمان، أسمعك بوضوح بخصوص: ${val}</div>`;
             }, 1000);
         }
-
-        window.onload = () => addMsg("مرحباً بك، أنا باتمان. إنه لشرف لي مساعدتك. كيف يمكنني أن أخدمك اليوم؟", 'bot');
-        input.addEventListener("keypress", (e) => { if(e.key === "Enter") send(); });
     </script>
 </body>
 </html>
