@@ -1,10 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
-  <title>تطبيقي الأول</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batman AI Assistant</title>
+    <style>
+        body { margin: 0; background-color: #121212; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; height: 100vh; }
+        #header { background-color: #1f1f1f; padding: 15px; display: flex; align-items: center; border-bottom: 2px solid #333; }
+        #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .message { max-width: 80%; padding: 12px 18px; border-radius: 20px; line-height: 1.4; font-size: 16px; }
+        .bot { align-self: flex-start; background-color: #333; border-bottom-right-radius: 5px; color: #eee; }
+        .user { align-self: flex-end; background-color: #007aff; border-bottom-left-radius: 5px; }
+        #input-area { background-color: #1f1f1f; padding: 15px; display: flex; gap: 10px; align-items: center; }
+        input { flex: 1; background: #2c2c2c; border: none; padding: 12px; border-radius: 25px; color: white; outline: none; font-size: 16px; text-align: right; }
+        button { background: #007aff; border: none; color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 20px; }
+    </style>
 </head>
 <body>
-  <h1>مرحباً بك في تطبيقي!</h1>
-  <p>هذه الصفحة ستظهر داخل التطبيق.</p>
+    <div id="header">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/batman-logo.png" width="30">
+        <span style="margin-right: 15px; font-weight: bold; font-size: 20px;">Batman AI Assistant</span>
+    </div>
+    <div id="chat-container" id="chat"></div>
+    <div id="input-area">
+        <input type="text" id="userInput" placeholder="تحدث مع باتمان...">
+        <button onclick="send()">✈</button>
+    </div>
+
+    <script>
+        const chat = document.getElementById('chat-container');
+        const input = document.getElementById('userInput');
+
+        function addMsg(txt, type) {
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerText = txt;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+            if(type === 'bot') speak(txt);
+        }
+
+        function speak(txt) {
+            const msg = new SpeechSynthesisUtterance(txt);
+            msg.lang = 'ar-SA';
+            msg.pitch = 0.6; // صوت عميق لباتمان
+            window.speechSynthesis.speak(msg);
+        }
+
+        function send() {
+            const val = input.value;
+            if(!val) return;
+            addMsg(val, 'user');
+            input.value = '';
+            
+            setTimeout(() => {
+                let res = "أنا هنا لحمايتك ومساعدتك. كباتمان، أقدر تواصلك معي بخصوص " + val;
+                if(val.includes("كيف حالك")) res = "أنا بخير وبكامل قوتي. شكراً لسؤالك اللطيف يا صديقي.";
+                addMsg(res, 'bot');
+            }, 1000);
+        }
+
+        window.onload = () => addMsg("مرحباً بك، أنا باتمان. إنه لشرف لي مساعدتك. كيف يمكنني أن أخدمك اليوم؟", 'bot');
+        input.addEventListener("keypress", (e) => { if(e.key === "Enter") send(); });
+    </script>
 </body>
 </html>
